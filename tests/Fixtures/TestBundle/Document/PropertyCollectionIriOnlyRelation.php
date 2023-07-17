@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the API Platform project.
+ *
+ * (c) Kévin Dunglas <dunglas@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace ApiPlatform\Tests\Fixtures\TestBundle\Document;
@@ -14,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class PropertyCollectionIriOnlyRelation
 {
     /**
-     * The entity ID
+     * The entity ID.
      */
     #[ODM\Id(strategy: 'INCREMENT', type: 'int')]
     private ?int $id = null;
@@ -31,17 +40,11 @@ class PropertyCollectionIriOnlyRelation
         return $this->id ?? 9999;
     }
 
-    /**
-     * @return PropertyCollectionIriOnly|null
-     */
     public function getPropertyCollectionIriOnly(): ?PropertyCollectionIriOnly
     {
         return $this->propertyCollectionIriOnly;
     }
 
-    /**
-     * @param PropertyCollectionIriOnly|null $propertyCollectionIriOnly
-     */
     public function setPropertyCollectionIriOnly(?PropertyCollectionIriOnly $propertyCollectionIriOnly): void
     {
         $this->propertyCollectionIriOnly = $propertyCollectionIriOnly;

@@ -240,21 +240,21 @@ class AbstractItemNormalizerTest extends TestCase
         $propertyCollectionIriOnly->addPropertyCollectionIriOnlyRelation($propertyCollectionIriOnlyRelation);
 
         $resourceRelationMetadataCollection = new ResourceMetadataCollection(PropertyCollectionIriOnlyRelation::class, [
-            (new ApiResource())->withOperations(new Operations([new GetCollection('/propertyCollectionIriOnlyRelations')]))
+            (new ApiResource())->withOperations(new Operations([new GetCollection('/propertyCollectionIriOnlyRelations')])),
         ]);
 
         $resourceMetadataCollectionFactoryProphecy = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
         $resourceMetadataCollectionFactoryProphecy->create(PropertyCollectionIriOnlyRelation::class)->willReturn($resourceRelationMetadataCollection);
 
         $propertyNameCollectionFactoryProphecy = $this->prophesize(PropertyNameCollectionFactoryInterface::class);
-        $propertyNameCollectionFactoryProphecy->create(PropertyCollectionIriOnly::class, ["normalization_groups" => null, "denormalization_groups" => null, "operation_name" => null])->willReturn(
+        $propertyNameCollectionFactoryProphecy->create(PropertyCollectionIriOnly::class, ['normalization_groups' => null, 'denormalization_groups' => null, 'operation_name' => null])->willReturn(
             new PropertyNameCollection(['propertyCollectionIriOnlyRelation'])
         );
 
         $propertyMetadataFactoryProphecy = $this->prophesize(PropertyMetadataFactoryInterface::class);
-        $propertyMetadataFactoryProphecy->create(PropertyCollectionIriOnly::class, 'propertyCollectionIriOnlyRelation', ["normalization_groups" => null, "denormalization_groups" => null, "operation_name" => null])->willReturn(
+        $propertyMetadataFactoryProphecy->create(PropertyCollectionIriOnly::class, 'propertyCollectionIriOnlyRelation', ['normalization_groups' => null, 'denormalization_groups' => null, 'operation_name' => null])->willReturn(
             (new ApiProperty())->withReadable(true)->withIriOnly(true)->withBuiltinTypes([
-                new Type('iterable', false, null, true, new Type('int', false, null, false), new Type('object', false, PropertyCollectionIriOnlyRelation::class, false))
+                new Type('iterable', false, null, true, new Type('int', false, null, false), new Type('object', false, PropertyCollectionIriOnlyRelation::class, false)),
             ])
         );
 
@@ -298,7 +298,7 @@ class AbstractItemNormalizerTest extends TestCase
         ];
         $this->assertSame($expected, $normalizer->normalize($propertyCollectionIriOnly, null, [
             'resources' => [],
-            'root_operation' => new GetCollection('/propertyCollectionIriOnlyRelations')
+            'root_operation' => new GetCollection('/propertyCollectionIriOnlyRelations'),
         ]));
     }
 

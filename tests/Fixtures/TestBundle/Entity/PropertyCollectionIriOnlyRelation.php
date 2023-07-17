@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the API Platform project.
+ *
+ * (c) Kévin Dunglas <dunglas@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace ApiPlatform\Tests\Fixtures\TestBundle\Entity;
@@ -15,7 +24,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class PropertyCollectionIriOnlyRelation
 {
     /**
-     * The entity ID
+     * The entity ID.
      */
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -35,17 +44,11 @@ class PropertyCollectionIriOnlyRelation
         return $this->id ?? 9999;
     }
 
-    /**
-     * @return PropertyCollectionIriOnly|null
-     */
     public function getPropertyCollectionIriOnly(): ?PropertyCollectionIriOnly
     {
         return $this->propertyCollectionIriOnly;
     }
 
-    /**
-     * @param PropertyCollectionIriOnly|null $propertyCollectionIriOnly
-     */
     public function setPropertyCollectionIriOnly(?PropertyCollectionIriOnly $propertyCollectionIriOnly): void
     {
         $this->propertyCollectionIriOnly = $propertyCollectionIriOnly;
