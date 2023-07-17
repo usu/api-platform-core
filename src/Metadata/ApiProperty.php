@@ -105,7 +105,7 @@ final class ApiProperty
         private ?bool $push = null,
         private ?string $security = null,
         private ?string $securityPostDenormalize = null,
-        private array | string | null $types = null,
+        private array|string|null $types = null,
         /*
          * The related php types.
          */
