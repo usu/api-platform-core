@@ -15,6 +15,7 @@ namespace ApiPlatform\Tests\Fixtures\TestBundle\Document;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -37,7 +38,7 @@ class PropertyCollectionIriOnly
     private Collection $propertyCollectionIriOnlyRelation;
 
     /**
-     * @var iterable<int, PropertyCollectionIriOnlyRelation> $iterableIri
+     * @var array<int, PropertyCollectionIriOnlyRelation> $iterableIri
      */
     #[ApiProperty(iriOnly: true)]
     #[Groups('read')]
