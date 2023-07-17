@@ -124,7 +124,7 @@ final class SchemaPropertyMetadataFactory implements PropertyMetadataFactoryInte
                 $propertySchema['owl:maxCardinality'] = 1;
             }
 
-            if ($isCollection && $propertyMetadata->getIriOnly()){
+            if ($isCollection && $propertyMetadata->getIriOnly()) {
                 $keyType = null;
                 $isCollection = false;
             }
