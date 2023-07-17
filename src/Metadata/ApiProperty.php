@@ -40,7 +40,7 @@ final class ApiProperty
      * @param string[]    $types                   the RDF types of this property
      * @param string[]    $iris
      * @param Type[]      $builtinTypes
-     * @param bool[]      $iriOnly                 whether to return the subRessource collection IRI instead of an iterable of IRI
+     * @param bool|null   $iriOnly                 whether to return the subRessource collection IRI instead of an iterable of IRI
      */
     public function __construct(
         private ?string $description = null,
