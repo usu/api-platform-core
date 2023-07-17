@@ -19,6 +19,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Exception\OperationNotFoundException;
 use ApiPlatform\Metadata\IriConverterInterface;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Property\Factory\PropertyMetadataFactoryInterface;
 use ApiPlatform\Metadata\Property\Factory\PropertyNameCollectionFactoryInterface;
 use ApiPlatform\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
@@ -633,6 +634,13 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
 
                 $resourceClass = $this->resourceClassResolver->getResourceClass($attributeValue, $className);
                 $childContext = $this->createChildContext($this->createOperationContext($context, $resourceClass), $attribute, $format);
+
+                if (true === $propertyMetadata->getIriOnly()) {
+                    $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation(null, true);
+                    if ($operation instanceof GetCollection) {
+                        return $this->iriConverter->getIriFromResource($resourceClass, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
+                    }
+                }
 
                 return $this->normalizeCollectionOfRelations($propertyMetadata, $attributeValue, $resourceClass, $format, $childContext);
             }
