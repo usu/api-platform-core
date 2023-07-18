@@ -470,7 +470,7 @@ final class ApiProperty
     /**
      * Whether to return the subRessource collection IRI instead of an iterable of IRI.
      */
-    public function getIriOnly()
+    public function getIriOnly(): ?bool
     {
         return $this->iriOnly;
     }
