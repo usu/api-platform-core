@@ -72,8 +72,8 @@ Feature: JSON-LD using iri_only parameter
             "@type": "PropertyCollectionIriOnly",
             "propertyCollectionIriOnlyRelation": "/property_collection_iri_only_relations",
             "iterableIri": "/property_collection_iri_only_relations"
-          },
-        ],
+          }
+        ]
       }
       """
     When I send a "GET" request to "/property_collection_iri_onlies/1"
