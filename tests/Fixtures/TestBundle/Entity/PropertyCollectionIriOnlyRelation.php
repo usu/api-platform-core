@@ -36,7 +36,7 @@ class PropertyCollectionIriOnlyRelation
     #[Groups('read')]
     public string $name = '';
 
-    #[ORM\ManyToOne(inversedBy: 'collectionIri')]
+    #[ORM\ManyToOne(inversedBy: 'propertyCollectionIriOnlyRelation')]
     private ?PropertyCollectionIriOnly $propertyCollectionIriOnly = null;
 
     public function getId(): ?int
