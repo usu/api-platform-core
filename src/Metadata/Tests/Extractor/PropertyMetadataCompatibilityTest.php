@@ -72,7 +72,7 @@ final class PropertyMetadataCompatibilityTest extends TestCase
         ],
         'iris' => ['https://schema.org/totalPrice'],
         'genId' => true,
-        'uriTemplate' => false,
+        'uriTemplate' => '/sub-resource-get-collection',
     ];
 
     /**
