@@ -34,14 +34,14 @@ class PropertyCollectionIriOnly
     private ?int $id = null;
 
     #[ORM\OneToMany(mappedBy: 'propertyCollectionIriOnly', targetEntity: PropertyCollectionIriOnlyRelation::class)]
-    #[ApiProperty(iriTemplate: '/property-collection-relations')]
+    #[ApiProperty(uriTemplate: '/property-collection-relations')]
     #[Groups('read')]
     private Collection $propertyCollectionIriOnlyRelation;
 
     /**
      * @var array<int, PropertyCollectionIriOnlyRelation> $iterableIri
      */
-    #[ApiProperty(iriTemplate: '/another-collection-operations')]
+    #[ApiProperty(uriTemplate: '/another-collection-operations')]
     #[Groups('read')]
     private array $iterableIri = [];
 

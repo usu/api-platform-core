@@ -32,14 +32,14 @@ class PropertyCollectionIriOnly
     private ?int $id = null;
 
     #[ODM\ReferenceMany(targetDocument: PropertyCollectionIriOnlyRelation::class)]
-    #[ApiProperty(iriTemplate: '/property-collection-relations')]
+    #[ApiProperty(uriTemplate: '/property-collection-relations')]
     #[Groups('read')]
     private Collection $propertyCollectionIriOnlyRelation;
 
     /**
      * @var array<int, PropertyCollectionIriOnlyRelation> $iterableIri
      */
-    #[ApiProperty(iriTemplate: '/property-collection-relations')]
+    #[ApiProperty(uriTemplate: '/property-collection-relations')]
     #[Groups('read')]
     private array $iterableIri = [];
 
