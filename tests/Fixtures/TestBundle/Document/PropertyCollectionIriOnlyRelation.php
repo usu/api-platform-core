@@ -16,7 +16,6 @@ namespace ApiPlatform\Tests\Fixtures\TestBundle\Document;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Tests\Fixtures\TestBundle\Entity\PropertyCollectionIriOnly;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -26,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     GetCollection(
         uriTemplate: '/parent/{parentId}/another-collection-operations',
         uriVariables: [
-            'parentId' => new Link(fromClass: PropertyCollectionIriOnly::class, fromProperty: 'propertyCollectionIriOnly'),
+            'parentId' => new Link(fromProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
         ]
     )
 ]

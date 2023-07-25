@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
     GetCollection(
         uriTemplate: '/parent/{parentId}/another-collection-operations',
         uriVariables: [
-            'parentId' => new Link(fromClass: PropertyCollectionIriOnly::class, fromProperty: 'propertyCollectionIriOnly'),
+            'parentId' => new Link(fromProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
         ]
     )
 ]
