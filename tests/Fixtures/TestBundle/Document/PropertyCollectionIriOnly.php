@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ODM\Document]
 class PropertyCollectionIriOnly
 {
-    #[ODM\Id(strategy: 'INCREMENT', type: 'int')]
+    #[ODM\Id(type: 'int', strategy: 'INCREMENT')]
     private ?int $id = null;
 
     #[ODM\ReferenceMany(targetDocument: PropertyCollectionIriOnlyRelation::class)]
