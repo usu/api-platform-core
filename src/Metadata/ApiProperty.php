@@ -475,7 +475,7 @@ final class ApiProperty
         return $this->uriTemplate;
     }
 
-    public function withUriTemplate(string $uriTemplate): self
+    public function withUriTemplate(?string $uriTemplate): self
     {
         $metadata = clone $this;
         $metadata->uriTemplate = $uriTemplate;
