@@ -15,7 +15,6 @@ namespace ApiPlatform\Tests\Fixtures\TestBundle\Document;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,14 +32,14 @@ class PropertyCollectionIriOnly
     private ?int $id = null;
 
     #[ODM\ReferenceMany(targetDocument: PropertyCollectionIriOnlyRelation::class)]
-    #[ApiProperty(iriOnly: true)]
+    #[ApiProperty(iriTemplate: '/property-collection-relations')]
     #[Groups('read')]
     private Collection $propertyCollectionIriOnlyRelation;
 
     /**
      * @var array<int, PropertyCollectionIriOnlyRelation> $iterableIri
      */
-    #[ApiProperty(iriOnly: true)]
+    #[ApiProperty(iriTemplate: '/property-collection-relations')]
     #[Groups('read')]
     private array $iterableIri = [];
 

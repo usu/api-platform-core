@@ -40,7 +40,7 @@ final class ApiProperty
      * @param string[]    $types                   the RDF types of this property
      * @param string[]    $iris
      * @param Type[]      $builtinTypes
-     * @param bool|null   $iriOnly                 whether to return the subRessource collection IRI instead of an iterable of IRI
+     * @param string|null $uriTemplate             whether to return the subRessource collection IRI instead of an iterable of IRI
      */
     public function __construct(
         private ?string $description = null,
@@ -105,7 +105,7 @@ final class ApiProperty
         private ?bool $push = null,
         private ?string $security = null,
         private ?string $securityPostDenormalize = null,
-        private array|string|null $types = null,
+        private array | string | null $types = null,
         /*
          * The related php types.
          */
@@ -115,7 +115,7 @@ final class ApiProperty
         private $iris = null,
         private ?bool $genId = null,
         private array $extraProperties = [],
-        private ?bool $iriOnly = null,
+        private ?string $uriTemplate = null,
     ) {
         if (\is_string($types)) {
             $this->types = (array) $types;
@@ -470,15 +470,15 @@ final class ApiProperty
     /**
      * Whether to return the subRessource collection IRI instead of an iterable of IRI.
      */
-    public function getIriOnly(): ?bool
+    public function getUriTemplate(): ?string
     {
-        return $this->iriOnly;
+        return $this->uriTemplate;
     }
 
-    public function withIriOnly(bool $iriOnly): self
+    public function withUriTemplate(string $uriTemplate): self
     {
         $metadata = clone $this;
-        $metadata->iriOnly = $iriOnly;
+        $metadata->uriTemplate = $uriTemplate;
 
         return $metadata;
     }

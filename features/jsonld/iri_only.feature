@@ -57,7 +57,7 @@ Feature: JSON-LD using iri_only parameter
       }
       """
 
-  Scenario: Retrieve Resource with iriOnly collection Property
+  Scenario: Retrieve Resource with uriTemplate collection Property
     Given there are propertyCollectionIriOnly with relations
     When I send a "GET" request to "/property_collection_iri_onlies"
     Then the response status code should be 200
@@ -70,8 +70,8 @@ Feature: JSON-LD using iri_only parameter
           {
             "@id": "/property_collection_iri_onlies/1",
             "@type": "PropertyCollectionIriOnly",
-            "propertyCollectionIriOnlyRelation": "/property_collection_iri_only_relations",
-            "iterableIri": "/property_collection_iri_only_relations"
+            "propertyCollectionIriOnlyRelation": "/property-collection-relations",
+            "iterableIri": "/another-collection-operations"
           }
         ]
       }
@@ -86,7 +86,7 @@ Feature: JSON-LD using iri_only parameter
         "@context": "/contexts/PropertyCollectionIriOnly",
         "@id": "/property_collection_iri_onlies/1",
         "@type": "PropertyCollectionIriOnly",
-        "propertyCollectionIriOnlyRelation": "/property_collection_iri_only_relations",
-        "iterableIri": "/property_collection_iri_only_relations"
+        "propertyCollectionIriOnlyRelation": "/property-collection-relations",
+        "iterableIri": "/another-collection-operations"
       }
       """

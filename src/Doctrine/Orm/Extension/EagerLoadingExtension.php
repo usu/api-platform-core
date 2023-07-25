@@ -155,9 +155,9 @@ final class EagerLoadingExtension implements QueryCollectionExtensionInterface, 
             }
 
             $fetchEager = $propertyMetadata->getFetchEager();
-            $iriOnly = $propertyMetadata->getIriOnly();
+            $uriTemplate = $propertyMetadata->geturiTemplate();
 
-            if (false === $fetchEager || true === $iriOnly) {
+            if (false === $fetchEager || null !== $uriTemplate) {
                 continue;
             }
 
