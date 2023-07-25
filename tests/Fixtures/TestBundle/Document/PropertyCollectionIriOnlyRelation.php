@@ -18,7 +18,7 @@ use ApiPlatform\Metadata\Post;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[GetCollection, Post]
+#[GetCollection(uriTemplate: '/property-collection-relations'), GetCollection(uriTemplate: '/another-collection-operations'), Post]
 #[ODM\Document]
 class PropertyCollectionIriOnlyRelation
 {
