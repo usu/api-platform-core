@@ -14,12 +14,22 @@ declare(strict_types=1);
 namespace ApiPlatform\Tests\Fixtures\TestBundle\Entity;
 
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-#[GetCollection(uriTemplate: '/property-collection-relations'), GetCollection(uriTemplate: '/another-collection-operations'), Post]
+#[
+    Post,
+    GetCollection(uriTemplate: '/property-collection-relations'),
+    GetCollection(
+        uriTemplate: '/parent/{parentId}/another-collection-operations',
+        uriVariables: [
+            'parentId' => new Link(fromClass: PropertyCollectionIriOnly::class, fromProperty: 'propertyCollectionIriOnly'),
+        ]
+    )
+]
 #[ORM\Entity]
 class PropertyCollectionIriOnlyRelation
 {

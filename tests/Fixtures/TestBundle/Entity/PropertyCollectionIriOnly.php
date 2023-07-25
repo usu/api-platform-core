@@ -23,9 +23,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Assert that a property being a collection set with ApiProperty::iriOnly to true returns only the IRI of the collection.
+ * Assert that a property being a collection set with ApiProperty::UriTemplate to true returns only the IRI of the collection.
  */
-#[Get(normalizationContext: ['groups' => ['read']]), GetCollection(normalizationContext: ['groups' => ['read']]), Post]
+#[
+    Post,
+    Get(normalizationContext: ['groups' => ['read']]),
+    GetCollection(normalizationContext: ['groups' => ['read']]),
+]
 #[ORM\Entity]
 class PropertyCollectionIriOnly
 {
@@ -42,7 +46,7 @@ class PropertyCollectionIriOnly
     /**
      * @var array<int, PropertyCollectionIriOnlyRelation> $iterableIri
      */
-    #[ApiProperty(uriTemplate: '/another-collection-operations')]
+    #[ApiProperty(uriTemplate: '/parent/{parentId}/another-collection-operations')]
     #[Groups('read')]
     private array $iterableIri = [];
 

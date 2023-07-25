@@ -14,11 +14,22 @@ declare(strict_types=1);
 namespace ApiPlatform\Tests\Fixtures\TestBundle\Document;
 
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Tests\Fixtures\TestBundle\Entity\PropertyCollectionIriOnly;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[GetCollection(uriTemplate: '/property-collection-relations'), GetCollection(uriTemplate: '/another-collection-operations'), Post]
+#[
+    Post,
+    GetCollection(uriTemplate: '/property-collection-relations'),
+    GetCollection(
+        uriTemplate: '/parent/{parentId}/another-collection-operations',
+        uriVariables: [
+            'parentId' => new Link(fromClass: PropertyCollectionIriOnly::class, fromProperty: 'propertyCollectionIriOnly'),
+        ]
+    )
+]
 #[ODM\Document]
 class PropertyCollectionIriOnlyRelation
 {

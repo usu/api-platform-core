@@ -23,7 +23,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Assert that a property being a collection set with ApiProperty::iriOnly to true returns only the IRI of the collection.
+ * Assert that a property being a collection set with ApiProperty::utiTemplate to true returns only the IRI of the collection.
  */
 #[Get(normalizationContext: ['groups' => ['read']]), GetCollection(normalizationContext: ['groups' => ['read']]), Post]
 #[ODM\Document]
@@ -40,7 +40,7 @@ class PropertyCollectionIriOnly
     /**
      * @var array<int, PropertyCollectionIriOnlyRelation> $iterableIri
      */
-    #[ApiProperty(uriTemplate: '/another-collection-operations')]
+    #[ApiProperty(uriTemplate: '/parent/{parentId}/another-collection-relations')]
     #[Groups('read')]
     private array $iterableIri = [];
 
