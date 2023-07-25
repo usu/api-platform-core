@@ -240,7 +240,7 @@ class AbstractItemNormalizerTest extends TestCase
         $propertyCollectionIriOnly->addPropertyCollectionIriOnlyRelation($propertyCollectionIriOnlyRelation);
 
         $resourceRelationMetadataCollection = new ResourceMetadataCollection(PropertyCollectionIriOnlyRelation::class, [
-            (new ApiResource())->withOperations(new Operations([new GetCollection('/propertyCollectionIriOnlyRelations')])),
+            (new ApiResource())->withOperations(new Operations([new GetCollection('/property-collection-relations')])),
         ]);
 
         $resourceMetadataCollectionFactoryProphecy = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
@@ -253,13 +253,13 @@ class AbstractItemNormalizerTest extends TestCase
 
         $propertyMetadataFactoryProphecy = $this->prophesize(PropertyMetadataFactoryInterface::class);
         $propertyMetadataFactoryProphecy->create(PropertyCollectionIriOnly::class, 'propertyCollectionIriOnlyRelation', ['normalization_groups' => null, 'denormalization_groups' => null, 'operation_name' => null])->willReturn(
-            (new ApiProperty())->withReadable(true)->withIriOnly(true)->withBuiltinTypes([
+            (new ApiProperty())->withReadable(true)->withUriTemplate('/property-collection-relations')->withBuiltinTypes([
                 new Type('iterable', false, null, true, new Type('int', false, null, false), new Type('object', false, PropertyCollectionIriOnlyRelation::class, false)),
             ])
         );
 
         $iriConverterProphecy = $this->prophesize(IriConverterInterface::class);
-        $iriConverterProphecy->getIriFromResource(PropertyCollectionIriOnlyRelation::class, UrlGeneratorInterface::ABS_PATH, new GetCollection('/propertyCollectionIriOnlyRelations'), Argument::any())->willReturn('/propertyCollectionIriOnlyRelations');
+        $iriConverterProphecy->getIriFromResource(PropertyCollectionIriOnlyRelation::class, UrlGeneratorInterface::ABS_PATH, new GetCollection('/property-collection-relations'), Argument::any())->willReturn('/property-collection-relations');
         $iriConverterProphecy->getIriFromResource($propertyCollectionIriOnly, UrlGeneratorInterface::ABS_URL, null, Argument::any())->willReturn('/propertyCollectionIriOnly');
 
         $propertyAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
@@ -294,11 +294,11 @@ class AbstractItemNormalizerTest extends TestCase
         $normalizer->setSerializer($serializerProphecy->reveal());
 
         $expected = [
-            'propertyCollectionIriOnlyRelation' => '/propertyCollectionIriOnlyRelations',
+            'propertyCollectionIriOnlyRelation' => '/property-collection-relations',
         ];
         $this->assertSame($expected, $normalizer->normalize($propertyCollectionIriOnly, null, [
             'resources' => [],
-            'root_operation' => new GetCollection('/propertyCollectionIriOnlyRelations'),
+            'root_operation' => new GetCollection('/property-collection-relations'),
         ]));
     }
 

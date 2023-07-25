@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-#[GetCollection, Post]
+#[GetCollection(uriTemplate: '/property-collection-relations'), GetCollection(uriTemplate: '/another-collection-operations'), Post]
 #[ORM\Entity]
 class PropertyCollectionIriOnlyRelation
 {

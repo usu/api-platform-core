@@ -76,6 +76,7 @@ class AppKernel extends Kernel
             new FriendsOfBehatSymfonyExtensionBundle(),
             new FrameworkBundle(),
             new MakerBundle(),
+            new Symfony\Bundle\MonologBundle\MonologBundle(),
         ];
 
         if (class_exists(DoctrineMongoDBBundle::class)) {
@@ -242,6 +243,17 @@ class AppKernel extends Kernel
         $c->prependExtensionConfig('api_platform', [
             'mapping' => [
                 'paths' => ['%kernel.project_dir%/../TestBundle/Resources/config/api_resources_orm'],
+            ],
+        ]);
+
+        $c->prependExtensionConfig('monolog', [
+            'handlers' => [
+                'main' => [
+                    'type' => 'stream',
+                    'path' => '%kernel.logs_dir%/%kernel.environment%.log',
+                    'level' => 'debug',
+                    'channels' => ['!event'],
+                ],
             ],
         ]);
     }

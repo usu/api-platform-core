@@ -896,7 +896,7 @@ class EagerLoadingExtensionTest extends TestCase
         $relationPropertyMetadata = $relationPropertyMetadata->withFetchEager(true);
         $relationPropertyMetadata = $relationPropertyMetadata->withReadableLink(true);
         $relationPropertyMetadata = $relationPropertyMetadata->withReadable(true);
-        $relationPropertyMetadata = $relationPropertyMetadata->withIriOnly(true);
+        $relationPropertyMetadata = $relationPropertyMetadata->withUriTemplate('/property-collection-relations');
 
         $propertyMetadataFactoryProphecy->create(PropertyCollectionIriOnly::class, 'propertyCollectionIriOnlyRelation', ['serializer_groups' => ['read'], 'normalization_groups' => 'read'])->willReturn($relationPropertyMetadata)->shouldBeCalled();
 
