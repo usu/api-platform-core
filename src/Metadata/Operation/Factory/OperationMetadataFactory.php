@@ -31,7 +31,7 @@ final class OperationMetadataFactory implements OperationMetadataFactoryInterfac
                     if ($operation->getUriTemplate() === $uriTemplate || $operation->getName() === $uriTemplate) {
                         return $operation;
                     }
-               }
+                }
             }
         }
 
