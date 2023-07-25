@@ -71,7 +71,7 @@ Feature: JSON-LD using iri_only parameter
             "@id": "/property_collection_iri_onlies/1",
             "@type": "PropertyCollectionIriOnly",
             "propertyCollectionIriOnlyRelation": "/property-collection-relations",
-            "iterableIri": "/another-collection-operations"
+            "iterableIri": "/parent/1/another-collection-operations"
           }
         ]
       }
@@ -87,6 +87,6 @@ Feature: JSON-LD using iri_only parameter
         "@id": "/property_collection_iri_onlies/1",
         "@type": "PropertyCollectionIriOnly",
         "propertyCollectionIriOnlyRelation": "/property-collection-relations",
-        "iterableIri": "/another-collection-operations"
+        "iterableIri": "/parent/1/another-collection-operations"
       }
       """

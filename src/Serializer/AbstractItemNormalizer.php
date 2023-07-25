@@ -209,7 +209,7 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
         }
 
         if (null === $objectToPopulate = $this->extractObjectToPopulate($resourceClass, $context, static::OBJECT_TO_POPULATE)) {
-            $normalizedData = \is_scalar($data) ? [$data] : $this->prepareForDenormalization($data);
+            $normalizedData = is_scalar($data) ? [$data] : $this->prepareForDenormalization($data);
             $class = $this->getClassDiscriminatorResolvedClass($normalizedData, $class, $context);
         }
 
@@ -278,7 +278,7 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
      *
      * @internal
      */
-    protected function instantiateObject(array &$data, string $class, array &$context, \ReflectionClass $reflectionClass, array|bool $allowedAttributes, string $format = null): object
+    protected function instantiateObject(array & $data, string $class, array & $context, \ReflectionClass $reflectionClass, array|bool $allowedAttributes, string $format = null): object
     {
         if (null !== $object = $this->extractObjectToPopulate($class, $context, static::OBJECT_TO_POPULATE)) {
             unset($context[static::OBJECT_TO_POPULATE]);
@@ -368,7 +368,7 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
         return $mappedClass;
     }
 
-    protected function createConstructorArgument($parameterData, string $key, \ReflectionParameter $constructorParameter, array &$context, string $format = null): mixed
+    protected function createConstructorArgument($parameterData, string $key, \ReflectionParameter $constructorParameter, array & $context, string $format = null): mixed
     {
         return $this->createAndValidateAttributeValue($constructorParameter->name, $parameterData, $format, $context);
     }
@@ -636,9 +636,9 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
                 $childContext = $this->createChildContext($this->createOperationContext($context, $resourceClass), $attribute, $format);
 
                 if (null !== $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
-                    $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation($itemUriTemplate, true);
+                    $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation($itemUriTemplate, true, true);
                     if ($operation instanceof GetCollection) {
-                        return $this->iriConverter->getIriFromResource($resourceClass, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
+                        return $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
                     }
                 }
 
@@ -756,7 +756,7 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
         return $iri;
     }
 
-    private function createAttributeValue(string $attribute, mixed $value, string $format = null, array &$context = []): mixed
+    private function createAttributeValue(string $attribute, mixed $value, string $format = null, array & $context = []): mixed
     {
         try {
             return $this->createAndValidateAttributeValue($attribute, $value, $format, $context);
