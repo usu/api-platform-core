@@ -40,7 +40,7 @@ class PropertyCollectionIriOnly
     /**
      * @var array<int, PropertyCollectionIriOnlyRelation> $iterableIri
      */
-    #[ApiProperty(uriTemplate: '/parent/{parentId}/another-collection-relations')]
+    #[ApiProperty(uriTemplate: '/parent/{parentId}/another-collection-operations')]
     #[Groups('read')]
     private array $iterableIri = [];
 
