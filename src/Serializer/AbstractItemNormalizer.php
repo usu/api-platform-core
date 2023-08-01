@@ -635,8 +635,12 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
                 $resourceClass = $this->resourceClassResolver->getResourceClass($attributeValue, $className);
                 $childContext = $this->createChildContext($this->createOperationContext($context, $resourceClass), $attribute, $format);
 
-                if (null !== $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
-                    $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation($itemUriTemplate, true, true);
+                if ($itemUriTemplate = $propertyMetadata->getUriTemplate()) {
+                    $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation(
+                        operationName: $itemUriTemplate,
+                        forceCollection: true,
+                        httpOperation: true
+                    );
                     if ($operation instanceof GetCollection) {
                         return $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
                     }
