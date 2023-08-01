@@ -114,8 +114,8 @@ final class ApiProperty
         private ?bool $initializable = null,
         private $iris = null,
         private ?bool $genId = null,
-        private array $extraProperties = [],
         private ?string $uriTemplate = null,
+        private array $extraProperties = [],
     ) {
         if (\is_string($types)) {
             $this->types = (array) $types;
