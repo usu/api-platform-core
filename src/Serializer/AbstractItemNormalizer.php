@@ -639,7 +639,8 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
                 $childContext = $this->createChildContext($context, $attribute, $format);
                 unset($childContext['iri'], $childContext['uri_variables'], $childContext['resource_class'], $childContext['operation']);
 
-                if ($itemUriTemplate = $propertyMetadata->getUriTemplate()) {
+                // @see ApiPlatform\Hal\Serializer\ItemNormalizer:getComponents logic for intentional duplicate content
+                if ($format === 'jsonld' && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
                     $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation(
                         operationName: $itemUriTemplate,
                         forceCollection: true,

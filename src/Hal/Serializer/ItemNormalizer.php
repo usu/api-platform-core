@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ApiPlatform\Hal\Serializer;
 
 use ApiPlatform\Api\UrlGeneratorInterface;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Util\ClassInfoTrait;
 use ApiPlatform\Serializer\AbstractItemNormalizer;
 use ApiPlatform\Serializer\CacheKeyTrait;
@@ -166,7 +167,28 @@ final class ItemNormalizer extends AbstractItemNormalizer
                     continue;
                 }
 
-                $relation = ['name' => $attribute, 'cardinality' => $isOne ? 'one' : 'many'];
+                $relation = ['name' => $attribute, 'cardinality' => $isOne ? 'one' : 'many', 'uriTemplate' => null];
+
+                // if we specify the uriTemplate, generates its value for link definition
+                // @see ApiPlatform\Serializer\AbstractItemNormalizer:getAttributeValue logic for intentional duplicate content
+                if ($isMany && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
+                    $attributeValue = $this->propertyAccessor->getValue($object, $attribute);
+                    $resourceClass = $this->resourceClassResolver->getResourceClass($attributeValue, $className);
+                    $childContext = $this->createChildContext($context, $attribute, $format);
+                    unset($childContext['iri'], $childContext['uri_variables'], $childContext['resource_class'], $childContext['operation']);
+
+                    $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation(
+                        operationName: $itemUriTemplate,
+                        forceCollection: true,
+                        httpOperation: true
+                    );
+
+                    if ($operation instanceof GetCollection) {
+                        $relation['uriTemplate'] = $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
+                    }
+                }
+
+
                 if ($propertyMetadata->isReadableLink()) {
                     $components['embedded'][] = $relation;
                 }
@@ -213,6 +235,12 @@ final class ItemNormalizer extends AbstractItemNormalizer
             $relationName = $relation['name'];
             if ($this->nameConverter) {
                 $relationName = $this->nameConverter->normalize($relationName, $class, $format, $context);
+            }
+
+            // if we specify the uriTemplate, then the link takes the uriTemplate defined.
+            if ('links' === $type && $itemUriTemplate = $relation['uriTemplate']) {
+                $data[$key][$relationName]['href'] = $itemUriTemplate;
+                continue;
             }
 
             if ('one' === $relation['cardinality']) {
