@@ -636,6 +636,7 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
                 $childContext = $this->createChildContext($this->createOperationContext($context, $resourceClass), $attribute, $format);
 
                 // @see ApiPlatform\Hal\Serializer\ItemNormalizer:getComponents logic for intentional duplicate content
+                // @see ApiPlatform\JsonApi\Serializer\ItemNormalizer:getComponents logic for intentional duplicate content
                 if ($format === 'jsonld' && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
                     $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation(
                         operationName: $itemUriTemplate,
