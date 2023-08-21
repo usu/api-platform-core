@@ -231,7 +231,7 @@ class AbstractItemNormalizerTest extends TestCase
         ]));
     }
 
-    public function testNormalizeCollectionPropertyAsStringOnIriOnly(): void
+    public function testNormalizeCollectionPropertyAsStringWithUriVariableSet(): void
     {
         $propertyCollectionIriOnlyRelation = new PropertyCollectionIriOnlyRelation();
         $propertyCollectionIriOnlyRelation->name = 'My Relation';
@@ -270,12 +270,9 @@ class AbstractItemNormalizerTest extends TestCase
         $resourceClassResolverProphecy = $this->prophesize(ResourceClassResolverInterface::class);
 
         $resourceClassResolverProphecy->isResourceClass(PropertyCollectionIriOnly::class)->willReturn(true);
-        $resourceClassResolverProphecy->getResourceClass($propertyCollectionIriOnly, null)->willReturn(PropertyCollectionIriOnly::class);
         $resourceClassResolverProphecy->getResourceClass(null, PropertyCollectionIriOnly::class)->willReturn(PropertyCollectionIriOnly::class);
 
         $resourceClassResolverProphecy->isResourceClass(PropertyCollectionIriOnlyRelation::class)->willReturn(true);
-        $resourceClassResolverProphecy->getResourceClass([$propertyCollectionIriOnlyRelation], null)->willReturn(PropertyCollectionIriOnlyRelation::class);
-        $resourceClassResolverProphecy->getResourceClass(null, PropertyCollectionIriOnlyRelation::class)->willReturn(PropertyCollectionIriOnlyRelation::class);
         $resourceClassResolverProphecy->getResourceClass([$propertyCollectionIriOnlyRelation], PropertyCollectionIriOnlyRelation::class)->willReturn(PropertyCollectionIriOnlyRelation::class);
 
         $normalizer = $this->getMockForAbstractClass(AbstractItemNormalizer::class, [
@@ -299,7 +296,7 @@ class AbstractItemNormalizerTest extends TestCase
             'propertyCollectionIriOnlyRelation' => '/property-collection-relations',
         ];
 
-        $this->assertSame($expected, $normalizer->normalize($propertyCollectionIriOnly, null, [
+        $this->assertSame($expected, $normalizer->normalize($propertyCollectionIriOnly, 'jsonld', [
             'resources' => [],
             'root_operation' => new GetCollection('/property-collection-relations'),
         ]));
