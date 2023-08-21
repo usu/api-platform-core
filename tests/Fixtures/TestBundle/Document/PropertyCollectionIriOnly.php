@@ -92,7 +92,7 @@ class PropertyCollectionIriOnly
         $propertyCollectionIriOnlyRelation = new PropertyCollectionIriOnlyRelation();
         $propertyCollectionIriOnlyRelation->name = 'Michel';
 
-        $this->iterableIri[] = $propertyCollectionIriOnlyRelation;
+        $this->iterableIri = [$propertyCollectionIriOnlyRelation];
 
         return $this->iterableIri;
     }

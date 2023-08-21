@@ -171,7 +171,7 @@ final class ItemNormalizer extends AbstractItemNormalizer
 
                 // if we specify the uriTemplate, generates its value for link definition
                 // @see ApiPlatform\Serializer\AbstractItemNormalizer:getAttributeValue logic for intentional duplicate content
-                if ($isMany && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
+                if ($className && $isMany && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
                     $attributeValue = $this->propertyAccessor->getValue($object, $attribute);
                     $resourceClass = $this->resourceClassResolver->getResourceClass($attributeValue, $className);
                     $childContext = $this->createChildContext($context, $attribute, $format);
