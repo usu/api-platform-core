@@ -15,16 +15,16 @@ namespace ApiPlatform\Serializer\Tests;
 
 use ApiPlatform\Api\UrlGeneratorInterface;
 use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Metadata\IriConverterInterface;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\IriConverterInterface;
 use ApiPlatform\Metadata\Operations;
 use ApiPlatform\Metadata\Property\Factory\PropertyMetadataFactoryInterface;
 use ApiPlatform\Metadata\Property\Factory\PropertyNameCollectionFactoryInterface;
 use ApiPlatform\Metadata\Property\PropertyNameCollection;
-use ApiPlatform\Metadata\ResourceClassResolverInterface;
 use ApiPlatform\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use ApiPlatform\Metadata\Resource\ResourceMetadataCollection;
+use ApiPlatform\Metadata\ResourceClassResolverInterface;
 use ApiPlatform\Serializer\AbstractItemNormalizer;
 use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\DtoWithNullValue;
 use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\DummyTableInheritance;
