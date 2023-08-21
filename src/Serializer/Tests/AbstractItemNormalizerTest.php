@@ -30,13 +30,13 @@ use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\DtoWithNullValue;
 use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\DummyTableInheritance;
 use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\NonCloneableDummy;
 use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\SecuredDummy;
+use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\Dummy;
+use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\DummyTableInheritanceChild;
+use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\DummyTableInheritanceRelated;
+use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\PropertyCollectionIriOnly;
+use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\PropertyCollectionIriOnlyRelation;
+use ApiPlatform\Serializer\Tests\Fixtures\ApiResource\RelatedDummy;
 use ApiPlatform\Symfony\Security\ResourceAccessCheckerInterface;
-use ApiPlatform\Tests\Fixtures\TestBundle\Entity\Dummy;
-use ApiPlatform\Tests\Fixtures\TestBundle\Entity\DummyTableInheritanceChild;
-use ApiPlatform\Tests\Fixtures\TestBundle\Entity\DummyTableInheritanceRelated;
-use ApiPlatform\Tests\Fixtures\TestBundle\Entity\PropertyCollectionIriOnly;
-use ApiPlatform\Tests\Fixtures\TestBundle\Entity\PropertyCollectionIriOnlyRelation;
-use ApiPlatform\Tests\Fixtures\TestBundle\Entity\RelatedDummy;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -231,7 +231,7 @@ class AbstractItemNormalizerTest extends TestCase
         ]));
     }
 
-    public function testNormalizeCollectionPropertyAsStringWithUriVariableSet(): void
+    public function testNormalizeCollectionPropertyAsStringWithUriTemplate(): void
     {
         $propertyCollectionIriOnlyRelation = new PropertyCollectionIriOnlyRelation();
         $propertyCollectionIriOnlyRelation->name = 'My Relation';
