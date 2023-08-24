@@ -26,14 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     GetCollection(
         uriTemplate: '/parent/{parentId}/another-collection-operations',
         uriVariables: [
-            'parentId' => new Link(fromProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
-        ]
-    ),
-    Get(
-        uriTemplate: '/parent/{parentId}/another-collection-operations/{id}',
-        uriVariables: [
-            'parentId' => new Link(fromProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
-            'id' => new Link(fromProperty: 'id', toClass: PropertyCollectionIriOnlyRelation::class),
+            'parentId' => new Link(toProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
         ]
     )
 ]
