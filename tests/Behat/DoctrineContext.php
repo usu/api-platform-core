@@ -78,6 +78,7 @@ use ApiPlatform\Tests\Fixtures\TestBundle\Document\Product as ProductDocument;
 use ApiPlatform\Tests\Fixtures\TestBundle\Document\Program as ProgramDocument;
 use ApiPlatform\Tests\Fixtures\TestBundle\Document\PropertyCollectionIriOnly as PropertyCollectionIriOnlyDocument;
 use ApiPlatform\Tests\Fixtures\TestBundle\Document\PropertyCollectionIriOnlyRelation as PropertyCollectionIriOnlyRelationDocument;
+use ApiPlatform\Tests\Fixtures\TestBundle\Document\PropertyUriTemplateOneToOneRelation as PropertyUriTemplateOneToOneRelationDocument;
 use ApiPlatform\Tests\Fixtures\TestBundle\Document\Question as QuestionDocument;
 use ApiPlatform\Tests\Fixtures\TestBundle\Document\RelatedDummy as RelatedDummyDocument;
 use ApiPlatform\Tests\Fixtures\TestBundle\Document\RelatedOwnedDummy as RelatedOwnedDummyDocument;
@@ -1964,7 +1965,7 @@ final class DoctrineContext implements Context
         $propertyCollectionIriOnlyRelation = $this->isOrm() ? new PropertyCollectionIriOnlyRelation() : new PropertyCollectionIriOnlyRelationDocument();
         $propertyCollectionIriOnlyRelation->name = 'asb';
 
-        $propertyToOneRelation = $this->isOrm() ? new PropertyUriTemplateOneToOneRelation() : new PropertyCollectionIriOnlyRelationDocument();
+        $propertyToOneRelation = $this->isOrm() ? new PropertyUriTemplateOneToOneRelation() : new PropertyUriTemplateOneToOneRelationDocument();
         $propertyToOneRelation->name = 'xarguš';
 
         $propertyCollectionIriOnly = $this->isOrm() ? new PropertyCollectionIriOnly() : new PropertyCollectionIriOnlyDocument();
