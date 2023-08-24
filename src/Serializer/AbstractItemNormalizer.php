@@ -655,7 +655,6 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
                 && $this->resourceClassResolver->isResourceClass($className)
             ) {
                 $childContext = $this->createChildContext($context, $attribute, $format);
-                $childContext['resource_class'] = $className;
                 unset($childContext['iri'], $childContext['uri_variables']);
 
                 if ('jsonld' === $format && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
