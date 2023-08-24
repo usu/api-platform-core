@@ -25,7 +25,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Assert that a property being a collection set with ApiProperty::utiTemplate to true returns only the IRI of the collection.
  */
-#[Get(normalizationContext: ['groups' => ['read']]), GetCollection(normalizationContext: ['groups' => ['read']]), Post]
+#[
+    Post,
+    Get(normalizationContext: ['groups' => ['read']]),
+    GetCollection(normalizationContext: ['groups' => ['read']]),
+]
 #[ODM\Document]
 class PropertyCollectionIriOnly
 {
@@ -43,6 +47,11 @@ class PropertyCollectionIriOnly
     #[ApiProperty(uriTemplate: '/parent/{parentId}/another-collection-operations')]
     #[Groups('read')]
     private array $iterableIri = [];
+
+    #[ApiProperty(uriTemplate: '/parent/{parentId}/property-uri-template/one-to-ones/{id}')]
+    #[ODM\ReferenceOne(targetDocument: PropertyUriTemplateOneToOneRelation::class)]
+    #[Groups('read')]
+    private ?PropertyUriTemplateOneToOneRelation $toOneRelation = null;
 
     public function __construct()
     {
@@ -95,5 +104,16 @@ class PropertyCollectionIriOnly
         $this->iterableIri = [$propertyCollectionIriOnlyRelation];
 
         return $this->iterableIri;
+    }
+
+    public function setToOneRelation(PropertyUriTemplateOneToOneRelation $toOneRelation): void
+    {
+        $toOneRelation->setPropertyToOneIriOnly($this);
+        $this->toOneRelation = $toOneRelation;
+    }
+
+    public function getToOneRelation(): ?PropertyUriTemplateOneToOneRelation
+    {
+        return $this->toOneRelation;
     }
 }

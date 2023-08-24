@@ -15,6 +15,7 @@ namespace ApiPlatform\Serializer\Tests;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\IriConverterInterface;
 use ApiPlatform\Metadata\Operations;
@@ -42,6 +43,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
@@ -231,7 +233,7 @@ class AbstractItemNormalizerTest extends TestCase
         ]));
     }
 
-    public function testNormalizeCollectionPropertyAsStringWithUriTemplate(): void
+    public function testNormalizePropertyAsIriWithUriTemplate(): void
     {
         $propertyCollectionIriOnlyRelation = new PropertyCollectionIriOnlyRelation();
         $propertyCollectionIriOnlyRelation->name = 'My Relation';
@@ -240,9 +242,11 @@ class AbstractItemNormalizerTest extends TestCase
         $propertyCollectionIriOnly->addPropertyCollectionIriOnlyRelation($propertyCollectionIriOnlyRelation);
 
         $collectionOperation = new GetCollection('/property-collection-relations');
+        $getIterableOperation = new GetCollection('/parent/{parentId}/another-collection-operations');
+        $getToOneOperation = new Get('/parent/{parentId}/another-collection-operations/{id}');
 
         $resourceRelationMetadataCollection = new ResourceMetadataCollection(PropertyCollectionIriOnlyRelation::class, [
-            (new ApiResource())->withOperations(new Operations([$collectionOperation])),
+            (new ApiResource())->withOperations(new Operations([$collectionOperation, $getIterableOperation, $getToOneOperation])),
         ]);
 
         $resourceMetadataCollectionFactoryProphecy = $this->prophesize(ResourceMetadataCollectionFactoryInterface::class);
@@ -250,7 +254,7 @@ class AbstractItemNormalizerTest extends TestCase
 
         $propertyNameCollectionFactoryProphecy = $this->prophesize(PropertyNameCollectionFactoryInterface::class);
         $propertyNameCollectionFactoryProphecy->create(PropertyCollectionIriOnly::class, ['normalization_groups' => null, 'denormalization_groups' => null, 'operation_name' => null])->willReturn(
-            new PropertyNameCollection(['propertyCollectionIriOnlyRelation'])
+            new PropertyNameCollection(['propertyCollectionIriOnlyRelation', 'iterableIri', 'toOneRelation'])
         );
 
         $propertyMetadataFactoryProphecy = $this->prophesize(PropertyMetadataFactoryInterface::class);
@@ -260,12 +264,27 @@ class AbstractItemNormalizerTest extends TestCase
             ])
         );
 
+        $propertyMetadataFactoryProphecy->create(PropertyCollectionIriOnly::class, 'iterableIri', ['normalization_groups' => null, 'denormalization_groups' => null, 'operation_name' => null])->willReturn(
+            (new ApiProperty())->withReadable(true)->withUriTemplate('/parent/{parentId}/another-collection-operations')->withBuiltinTypes([
+                new Type('iterable', false, null, true, new Type('int', false, null, false), new Type('object', false, PropertyCollectionIriOnlyRelation::class, false)),
+            ])
+        );
+
+        $propertyMetadataFactoryProphecy->create(PropertyCollectionIriOnly::class, 'toOneRelation', ['normalization_groups' => null, 'denormalization_groups' => null, 'operation_name' => null])->willReturn(
+            (new ApiProperty())->withReadable(true)->withUriTemplate('/parent/{parentId}/another-collection-operations/{id}')->withBuiltinTypes([
+                new Type('object', false, PropertyCollectionIriOnlyRelation::class, false),
+            ])
+        );
+
         $iriConverterProphecy = $this->prophesize(IriConverterInterface::class);
-        $iriConverterProphecy->getIriFromResource($propertyCollectionIriOnly, UrlGeneratorInterface::ABS_URL, null, Argument::any())->willReturn('/property-collection-relations');
-        $iriConverterProphecy->getIriFromResource($propertyCollectionIriOnly, UrlGeneratorInterface::ABS_PATH, Argument::type(GetCollection::class), Argument::any())->willReturn('/property-collection-relations');
+        $iriConverterProphecy->getIriFromResource($propertyCollectionIriOnly, UrlGeneratorInterface::ABS_URL, null, Argument::any())->willReturn('/property-collection-relations', '/parent/42/another-collection-operations');
+        $iriConverterProphecy->getIriFromResource($propertyCollectionIriOnly, UrlGeneratorInterface::ABS_PATH, Argument::type(GetCollection::class), Argument::any())->willReturn('/property-collection-relations', '/parent/42/another-collection-operations');
+        $iriConverterProphecy->getIriFromResource($propertyCollectionIriOnly, UrlGeneratorInterface::ABS_PATH, Argument::type(Get::class), Argument::any())->willReturn('/parent/42/another-collection-operations/24');
 
         $propertyAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $propertyAccessorProphecy->getValue($propertyCollectionIriOnly, 'propertyCollectionIriOnlyRelation')->willReturn([$propertyCollectionIriOnlyRelation]);
+        $propertyAccessorProphecy->getValue($propertyCollectionIriOnly, 'iterableIri')->willReturn($propertyCollectionIriOnlyRelation);
+        $propertyAccessorProphecy->getValue($propertyCollectionIriOnly, 'toOneRelation')->willReturn($propertyCollectionIriOnlyRelation);
 
         $resourceClassResolverProphecy = $this->prophesize(ResourceClassResolverInterface::class);
 
@@ -280,7 +299,7 @@ class AbstractItemNormalizerTest extends TestCase
             $propertyMetadataFactoryProphecy->reveal(),
             $iriConverterProphecy->reveal(),
             $resourceClassResolverProphecy->reveal(),
-            $propertyAccessorProphecy->reveal(),
+            new PropertyAccessor(), // $propertyAccessorProphecy->reveal(),
             null,
             null,
             [],
@@ -294,11 +313,13 @@ class AbstractItemNormalizerTest extends TestCase
 
         $expected = [
             'propertyCollectionIriOnlyRelation' => '/property-collection-relations',
+            'iterableIri' => '/parent/42/another-collection-operations',
+            'toOneRelation' => '/parent/42/another-collection-operations/24',
         ];
 
         $this->assertSame($expected, $normalizer->normalize($propertyCollectionIriOnly, 'jsonld', [
             'resources' => [],
-            'root_operation' => new GetCollection('/property-collection-relations'),
+            'root_operation' => new GetCollection('/property_collection_iri_onlies'),
         ]));
     }
 

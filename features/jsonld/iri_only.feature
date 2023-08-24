@@ -57,13 +57,14 @@ Feature: JSON-LD using iri_only parameter
       }
       """
 
+  @createSchema
   Scenario: Retrieve Resource with uriTemplate collection Property
     Given there are propertyCollectionIriOnly with relations
     When I send a "GET" request to "/property_collection_iri_onlies"
     Then the response status code should be 200
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/ld+json; charset=utf-8"
-    And the JSON should be valid according to this schema:
+    And the JSON should be a superset of:
       """
       {
         "hydra:member": [
@@ -71,7 +72,8 @@ Feature: JSON-LD using iri_only parameter
             "@id": "/property_collection_iri_onlies/1",
             "@type": "PropertyCollectionIriOnly",
             "propertyCollectionIriOnlyRelation": "/property-collection-relations",
-            "iterableIri": "/parent/1/another-collection-operations"
+            "iterableIri": "/parent/1/another-collection-operations",
+            "toOneRelation": "/parent/1/property-uri-template/one-to-ones/1"
           }
         ]
       }
@@ -80,13 +82,14 @@ Feature: JSON-LD using iri_only parameter
     Then the response status code should be 200
     And the response should be in JSON
     And the header "Content-Type" should be equal to "application/ld+json; charset=utf-8"
-    And the JSON should be valid according to this schema:
+    And the JSON should be a superset of:
       """
       {
         "@context": "/contexts/PropertyCollectionIriOnly",
         "@id": "/property_collection_iri_onlies/1",
         "@type": "PropertyCollectionIriOnly",
         "propertyCollectionIriOnlyRelation": "/property-collection-relations",
-        "iterableIri": "/parent/1/another-collection-operations"
+        "iterableIri": "/parent/1/another-collection-operations",
+        "toOneRelation": "/parent/1/property-uri-template/one-to-ones/1"
       }
       """

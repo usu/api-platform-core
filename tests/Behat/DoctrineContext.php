@@ -161,6 +161,7 @@ use ApiPlatform\Tests\Fixtures\TestBundle\Entity\Product;
 use ApiPlatform\Tests\Fixtures\TestBundle\Entity\Program;
 use ApiPlatform\Tests\Fixtures\TestBundle\Entity\PropertyCollectionIriOnly;
 use ApiPlatform\Tests\Fixtures\TestBundle\Entity\PropertyCollectionIriOnlyRelation;
+use ApiPlatform\Tests\Fixtures\TestBundle\Entity\PropertyUriTemplateOneToOneRelation;
 use ApiPlatform\Tests\Fixtures\TestBundle\Entity\Question;
 use ApiPlatform\Tests\Fixtures\TestBundle\Entity\RamseyUuidDummy;
 use ApiPlatform\Tests\Fixtures\TestBundle\Entity\RelatedDummy;
@@ -343,8 +344,6 @@ final class DoctrineContext implements Context
 
     /**
      * @Given there are :nb fooDummy objects with fake names
-     *
-     * @param mixed $nb
      */
     public function thereAreFooDummyObjectsWithFakeNames($nb): void
     {
@@ -1781,8 +1780,6 @@ final class DoctrineContext implements Context
 
     /**
      * @Given there are :nb DummyDtoCustom
-     *
-     * @param mixed $nb
      */
     public function thereAreNbDummyDtoCustom($nb): void
     {
@@ -1958,16 +1955,21 @@ final class DoctrineContext implements Context
     /**
      * @Given there are propertyCollectionIriOnly with relations
      */
-    public function thereAreIriOnlyCollections(): void
+    public function thereAreResourcesWithPropertyUriTemplates(): void
     {
         $propertyCollectionIriOnlyRelation = $this->isOrm() ? new PropertyCollectionIriOnlyRelation() : new PropertyCollectionIriOnlyRelationDocument();
-        $propertyCollectionIriOnlyRelation->name = 'relation';
+        $propertyCollectionIriOnlyRelation->name = 'asb';
+
+        $propertyToOneRelation = $this->isOrm() ? new PropertyUriTemplateOneToOneRelation() : new PropertyCollectionIriOnlyRelationDocument();
+        $propertyToOneRelation->name = 'xarguš';
 
         $propertyCollectionIriOnly = $this->isOrm() ? new PropertyCollectionIriOnly() : new PropertyCollectionIriOnlyDocument();
         $propertyCollectionIriOnly->addPropertyCollectionIriOnlyRelation($propertyCollectionIriOnlyRelation);
+        $propertyCollectionIriOnly->setToOneRelation($propertyToOneRelation);
 
         $this->manager->persist($propertyCollectionIriOnly);
         $this->manager->persist($propertyCollectionIriOnlyRelation);
+        $this->manager->persist($propertyToOneRelation);
         $this->manager->flush();
     }
 

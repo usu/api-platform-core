@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ApiPlatform\Tests\Fixtures\TestBundle\Entity;
 
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
@@ -22,20 +23,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[
     Post,
-    GetCollection(uriTemplate: '/property-collection-relations'),
-    GetCollection(
-        uriTemplate: '/parent/{parentId}/another-collection-operations',
+    GetCollection(uriTemplate: '/property-uri-template/one-to-ones'),
+    Get(
+        uriTemplate: '/parent/{parentId}/property-uri-template/one-to-ones/{id}',
         uriVariables: [
-            'parentId' => new Link(toProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
+            'parentId' => new Link(toProperty: 'propertyToOneIriOnly', fromClass: PropertyCollectionIriOnly::class),
+            'id' => new Link(fromClass: PropertyUriTemplateOneToOneRelation::class),
         ]
     )
 ]
 #[ORM\Entity]
-class PropertyCollectionIriOnlyRelation
+class PropertyUriTemplateOneToOneRelation
 {
-    /**
-     * The entity ID.
-     */
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
@@ -46,21 +45,21 @@ class PropertyCollectionIriOnlyRelation
     #[Groups('read')]
     public string $name = '';
 
-    #[ORM\ManyToOne(inversedBy: 'propertyCollectionIriOnlyRelation')]
-    private ?PropertyCollectionIriOnly $propertyCollectionIriOnly = null;
+    #[ORM\OneToOne(inversedBy: 'toOneRelation')]
+    private ?PropertyCollectionIriOnly $propertyToOneIriOnly = null;
 
     public function getId(): ?int
     {
-        return $this->id ?? 9999;
+        return $this->id ?? 42;
     }
 
-    public function getPropertyCollectionIriOnly(): ?PropertyCollectionIriOnly
+    public function getPropertyToOneIriOnly(): ?PropertyCollectionIriOnly
     {
-        return $this->propertyCollectionIriOnly;
+        return $this->propertyToOneIriOnly;
     }
 
-    public function setPropertyCollectionIriOnly(?PropertyCollectionIriOnly $propertyCollectionIriOnly): void
+    public function setPropertyToOneIriOnly(?PropertyCollectionIriOnly $propertyToOneIriOnly): void
     {
-        $this->propertyCollectionIriOnly = $propertyCollectionIriOnly;
+        $this->propertyToOneIriOnly = $propertyToOneIriOnly;
     }
 }

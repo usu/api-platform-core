@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ApiPlatform\Tests\Fixtures\TestBundle\Document;
 
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
@@ -27,14 +28,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
         uriVariables: [
             'parentId' => new Link(fromProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
         ]
+    ),
+    Get(
+        uriTemplate: '/parent/{parentId}/another-collection-operations/{id}',
+        uriVariables: [
+            'parentId' => new Link(fromProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
+            'id' => new Link(fromProperty: 'id', toClass: PropertyCollectionIriOnlyRelation::class),
+        ]
     )
 ]
 #[ODM\Document]
 class PropertyCollectionIriOnlyRelation
 {
-    /**
-     * The entity ID.
-     */
     #[ODM\Id(strategy: 'INCREMENT', type: 'int')]
     private ?int $id = null;
 

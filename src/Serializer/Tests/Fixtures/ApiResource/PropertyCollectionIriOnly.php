@@ -44,9 +44,17 @@ class PropertyCollectionIriOnly
     #[Groups('read')]
     private array $iterableIri = [];
 
+    #[ApiProperty(uriTemplate: '/parent/{parentId}/another-collection-operations/{id}')]
+    #[Groups('read')]
+    private PropertyCollectionIriOnlyRelation $toOneRelation;
+
     public function __construct()
     {
         $this->propertyCollectionIriOnlyRelation = new ArrayCollection();
+
+        $this->toOneRelation = new PropertyCollectionIriOnlyRelation();
+        $this->toOneRelation->name = 'Roger';
+        $this->toOneRelation->setPropertyCollectionIriOnly($this);
     }
 
     public function getId(): ?int
@@ -95,5 +103,10 @@ class PropertyCollectionIriOnly
         $this->iterableIri = [$propertyCollectionIriOnlyRelation];
 
         return $this->iterableIri;
+    }
+
+    public function getToOneRelation(): PropertyCollectionIriOnlyRelation
+    {
+        return $this->toOneRelation;
     }
 }

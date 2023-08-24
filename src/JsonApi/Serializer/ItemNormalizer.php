@@ -18,7 +18,6 @@ use ApiPlatform\Api\ResourceClassResolverInterface;
 use ApiPlatform\Api\UrlGeneratorInterface;
 use ApiPlatform\Exception\ItemNotFoundException;
 use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Property\Factory\PropertyMetadataFactoryInterface;
 use ApiPlatform\Metadata\Property\Factory\PropertyNameCollectionFactoryInterface;
 use ApiPlatform\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
@@ -320,7 +319,7 @@ final class ItemNormalizer extends AbstractItemNormalizer
 
                 // if we specify the uriTemplate, generates its value for link definition
                 // @see ApiPlatform\Serializer\AbstractItemNormalizer:getAttributeValue logic for intentional duplicate content
-                if ($isMany && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
+                if ($itemUriTemplate = $propertyMetadata->getUriTemplate()) {
                     $attributeValue = $this->propertyAccessor->getValue($object, $attribute);
                     $resourceClass = $this->resourceClassResolver->getResourceClass($attributeValue, $className);
                     $childContext = $this->createChildContext($context, $attribute, $format);
@@ -328,13 +327,10 @@ final class ItemNormalizer extends AbstractItemNormalizer
 
                     $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation(
                         operationName: $itemUriTemplate,
-                        forceCollection: true,
                         httpOperation: true
                     );
 
-                    if ($operation instanceof GetCollection) {
-                        $components['links'][$attribute] = $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
-                    }
+                    $components['links'][$attribute] = $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
                 }
 
                 $components['relationships'][] = $relation;

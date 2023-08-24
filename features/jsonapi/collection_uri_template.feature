@@ -8,6 +8,7 @@ Feature: Exposing a property being a collection of resources
     Given I add "Accept" header equal to "application/vnd.api+json"
     And I add "Content-Type" header equal to "application/vnd.api+json"
 
+  @createSchema
   Scenario: Retrieve Resource with uriTemplate collection Property
     Given there are propertyCollectionIriOnly with relations
     And I send a "GET" request to "/property_collection_iri_onlies/1"
@@ -20,7 +21,8 @@ Feature: Exposing a property being a collection of resources
       {
         "links": {
           "propertyCollectionIriOnlyRelation": "/property-collection-relations",
-          "iterableIri": "/parent/1/another-collection-operations"
+          "iterableIri": "/parent/1/another-collection-operations",
+          "toOneRelation": "/parent/1/property-uri-template/one-to-ones/1"
         },
         "data": {
           "id": "/property_collection_iri_onlies/1",
@@ -41,6 +43,12 @@ Feature: Exposing a property being a collection of resources
                   "id": "/property_collection_iri_only_relations/9999"
                 }
               ]
+            },
+            "toOneRelation": {
+              "data": {
+                "type": "PropertyUriTemplateOneToOneRelation",
+                "id": "/parent/1/property-uri-template/one-to-ones/1"
+              }
             }
           }
         }

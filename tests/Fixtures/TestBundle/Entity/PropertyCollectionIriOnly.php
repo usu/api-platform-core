@@ -50,6 +50,11 @@ class PropertyCollectionIriOnly
     #[Groups('read')]
     private array $iterableIri = [];
 
+    #[ApiProperty(uriTemplate: '/parent/{parentId}/property-uri-template/one-to-ones/{id}')]
+    #[ORM\OneToOne(mappedBy: 'propertyToOneIriOnly')]
+    #[Groups('read')]
+    private ?PropertyUriTemplateOneToOneRelation $toOneRelation = null;
+
     public function __construct()
     {
         $this->propertyCollectionIriOnlyRelation = new ArrayCollection();
@@ -101,5 +106,16 @@ class PropertyCollectionIriOnly
         $this->iterableIri = [$propertyCollectionIriOnlyRelation];
 
         return $this->iterableIri;
+    }
+
+    public function setToOneRelation(PropertyUriTemplateOneToOneRelation $toOneRelation): void
+    {
+        $toOneRelation->setPropertyToOneIriOnly($this);
+        $this->toOneRelation = $toOneRelation;
+    }
+
+    public function getToOneRelation(): ?PropertyUriTemplateOneToOneRelation
+    {
+        return $this->toOneRelation;
     }
 }

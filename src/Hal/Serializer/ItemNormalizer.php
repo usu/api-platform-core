@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ApiPlatform\Hal\Serializer;
 
 use ApiPlatform\Api\UrlGeneratorInterface;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Util\ClassInfoTrait;
 use ApiPlatform\Serializer\AbstractItemNormalizer;
 use ApiPlatform\Serializer\CacheKeyTrait;
@@ -68,6 +67,7 @@ final class ItemNormalizer extends AbstractItemNormalizer
 
         $context = $this->initContext($resourceClass, $context);
         $iri = $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $context['operation'] ?? null, $context);
+
         $context['iri'] = $iri;
         $context['api_normalize'] = true;
 
@@ -76,6 +76,7 @@ final class ItemNormalizer extends AbstractItemNormalizer
         }
 
         $data = parent::normalize($object, $format, $context);
+
         if (!\is_array($data)) {
             return $data;
         }
@@ -167,25 +168,21 @@ final class ItemNormalizer extends AbstractItemNormalizer
                     continue;
                 }
 
-                $relation = ['name' => $attribute, 'cardinality' => $isOne ? 'one' : 'many', 'uriTemplate' => null];
+                $relation = ['name' => $attribute, 'cardinality' => $isOne ? 'one' : 'many', 'iri' => null, 'operation' => null];
 
                 // if we specify the uriTemplate, generates its value for link definition
                 // @see ApiPlatform\Serializer\AbstractItemNormalizer:getAttributeValue logic for intentional duplicate content
-                if (($className ?? false) && $isMany && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
-                    $attributeValue = $this->propertyAccessor->getValue($object, $attribute);
-                    $resourceClass = $this->resourceClassResolver->getResourceClass($attributeValue, $className);
+                if (($className ?? false) && $uriTemplate = $propertyMetadata->getUriTemplate()) {
                     $childContext = $this->createChildContext($context, $attribute, $format);
-                    unset($childContext['iri'], $childContext['uri_variables'], $childContext['resource_class'], $childContext['operation']);
+                    unset($childContext['iri'], $childContext['uri_variables'], $childContext['resource_class'], $childContext['operation'], $childContext['operation_name']);
 
-                    $operation = $this->resourceMetadataCollectionFactory->create($resourceClass)->getOperation(
-                        operationName: $itemUriTemplate,
-                        forceCollection: true,
+                    $operation = $this->resourceMetadataCollectionFactory->create($className)->getOperation(
+                        operationName: $uriTemplate,
                         httpOperation: true
                     );
 
-                    if ($operation instanceof GetCollection) {
-                        $relation['uriTemplate'] = $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
-                    }
+                    $relation['iri'] = $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $operation, $childContext);
+                    $relation['operation'] = $operation;
                 }
 
                 if ($propertyMetadata->isReadableLink()) {
@@ -226,19 +223,29 @@ final class ItemNormalizer extends AbstractItemNormalizer
                 continue;
             }
 
-            $attributeValue = $this->getAttributeValue($object, $relation['name'], $format, $context);
-            if (empty($attributeValue)) {
-                continue;
-            }
-
             $relationName = $relation['name'];
             if ($this->nameConverter) {
                 $relationName = $this->nameConverter->normalize($relationName, $class, $format, $context);
             }
 
             // if we specify the uriTemplate, then the link takes the uriTemplate defined.
-            if ('links' === $type && $itemUriTemplate = $relation['uriTemplate']) {
-                $data[$key][$relationName]['href'] = $itemUriTemplate;
+            if ('links' === $type && $iri = $relation['iri']) {
+                $data[$key][$relationName]['href'] = $iri;
+                continue;
+            }
+
+            if ($operation = $relation['operation']) {
+                $childContext = $this->createChildContext($context, $relationName, $format);
+                unset($childContext['iri'], $childContext['uri_variables'], $childContext['operation'], $childContext['operation_name']);
+
+                $childContext['operation'] = $operation;
+                $childContext['operation_name'] = $operation->getName();
+                $attributeValue = $this->getAttributeValue($object, $relation['name'], $format, $childContext);
+            } else {
+                $attributeValue = $this->getAttributeValue($object, $relation['name'], $format, $context);
+            }
+
+            if (empty($attributeValue)) {
                 continue;
             }
 

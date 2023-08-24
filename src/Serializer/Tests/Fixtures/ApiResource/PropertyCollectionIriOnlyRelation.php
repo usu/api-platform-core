@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ApiPlatform\Serializer\Tests\Fixtures\ApiResource;
 
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
@@ -25,6 +26,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
         uriTemplate: '/parent/{parentId}/another-collection-operations',
         uriVariables: [
             'parentId' => new Link(fromProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
+        ]
+    ),
+    Get(
+        uriTemplate: '/parent/{parentId}/another-collection-operations/{id}',
+        uriVariables: [
+            'parentId' => new Link(fromProperty: 'propertyCollectionIriOnly', fromClass: PropertyCollectionIriOnly::class),
+            'id' => new Link(fromProperty: 'id', toClass: PropertyCollectionIriOnlyRelation::class),
         ]
     )
 ]
