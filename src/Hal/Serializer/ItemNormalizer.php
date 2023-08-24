@@ -18,7 +18,6 @@ use ApiPlatform\Metadata\Util\ClassInfoTrait;
 use ApiPlatform\Serializer\AbstractItemNormalizer;
 use ApiPlatform\Serializer\CacheKeyTrait;
 use ApiPlatform\Serializer\ContextTrait;
-use ApiPlatform\Tests\Fixtures\TestBundle\Entity\DummyFriend;
 use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Mapping\AttributeMetadataInterface;
@@ -67,12 +66,7 @@ final class ItemNormalizer extends AbstractItemNormalizer
         }
 
         $context = $this->initContext($resourceClass, $context);
-        dump($object::class);
-        if ($object instanceof DummyFriend) {
-            dump(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 5));
-        }
         $iri = $this->iriConverter->getIriFromResource($object, UrlGeneratorInterface::ABS_PATH, $context['operation'] ?? null, $context);
-        dump($iri);
 
         $context['iri'] = $iri;
         $context['api_normalize'] = true;

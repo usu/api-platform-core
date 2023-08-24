@@ -654,12 +654,12 @@ abstract class AbstractItemNormalizer extends AbstractObjectNormalizer
                 ($className = $type->getClassName())
                 && $this->resourceClassResolver->isResourceClass($className)
             ) {
-                $childContext = $this->createChildContext($context, $attribute, $format);
+                $childContext = $this->createChildContext($this->createOperationContext($context, $className), $attribute, $format);
                 unset($childContext['iri'], $childContext['uri_variables']);
 
-                if ('jsonld' === $format && $itemUriTemplate = $propertyMetadata->getUriTemplate()) {
+                if ('jsonld' === $format && $uriTemplate = $propertyMetadata->getUriTemplate()) {
                     $operation = $this->resourceMetadataCollectionFactory->create($className)->getOperation(
-                        operationName: $itemUriTemplate,
+                        operationName: $uriTemplate,
                         httpOperation: true
                     );
 
