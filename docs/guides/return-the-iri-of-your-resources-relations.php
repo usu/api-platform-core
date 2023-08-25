@@ -10,6 +10,7 @@
 
 namespace App\ApiResource {
     use ApiPlatform\Metadata\ApiProperty;
+    use ApiPlatform\Metadata\ApiResource;
     use ApiPlatform\Metadata\Get;
     use ApiPlatform\Metadata\GetCollection;
     use ApiPlatform\Metadata\Link;
@@ -17,17 +18,19 @@ namespace App\ApiResource {
     use ApiPlatform\State\ProviderInterface;
     use Symfony\Component\Serializer\Annotation\Groups;
 
-    #[
-        Get(normalizationContext: ['groups' => ['read']], provider: Brand::class)
-    ]
+    #[ApiResource(
+        operations: [
+            new Get(normalizationContext: ['groups' => ['read']], provider: Brand::class),
+        ],
+    )]
     class Brand implements ProviderInterface
     {
         public function __construct(
             #[ApiProperty(identifier: true)]
-            public readonly int $id,
+            public readonly int $id = 1,
 
             #[Groups('read')]
-            public readonly string $name,
+            public readonly string $name = 'Anon',
 
             // Setting uriTemplate on a relation with a resource collection will try to find the related operation.
             // It is based on the uriTemplate set on the operation defined on the Car resource (see below).
@@ -84,25 +87,27 @@ namespace App\ApiResource {
         }
     }
 
-    #[
-        Get,
-        // Without the use of uriTemplate on the property this would be used coming from the Brand resource, but not anymore.
-        GetCollection(uriTemplate: '/cars'),
-        // This operation will be used to create the IRI instead since the uriTemplate matches.
-        GetCollection(
-            uriTemplate: '/brands/{brandId}/cars',
-            uriVariables: [
-                'brandId' => new Link(toProperty: 'brand', fromClass: Brand::class),
-            ]
-        ),
-    ]
+    #[ApiResource(
+        operations: [
+            new Get,
+            // Without the use of uriTemplate on the property this would be used coming from the Brand resource, but not anymore.
+            new GetCollection(uriTemplate: '/cars'),
+            // This operation will be used to create the IRI instead since the uriTemplate matches.
+            new GetCollection(
+                uriTemplate: '/brands/{brandId}/cars',
+                uriVariables: [
+                    'brandId' => new Link(toProperty: 'brand', fromClass: Brand::class),
+                ]
+            ),
+        ],
+    )]
     class Car
     {
         public function __construct(
             #[ApiProperty(identifier: true)]
-            public readonly int $id,
-            public readonly string $name,
-            private Brand $brand
+            public readonly int $id = 1,
+            public readonly string $name = 'Anon',
+            private ?Brand $brand = null
         )
         {
         }
@@ -118,26 +123,28 @@ namespace App\ApiResource {
         }
     }
 
-    #[
-        // Without the use of uriTemplate on the property this would be used coming from the Brand resource, but not anymore.
-        Get(uriTemplate: '/addresses/{id}'),
-        // This operation will be used to create the IRI instead since the uriTemplate matches.
-        Get(
-            uriTemplate: '/brands/{brandId}/addresses/{id}',
-            uriVariables: [
-                'brandId' => new Link(toProperty: 'brand', fromClass: Brand::class),
-                'id' => new Link(fromClass: Address::class),
-            ]
-        )
-    ]
+    #[ApiResource(
+        operations: [
+            // Without the use of uriTemplate on the property this would be used coming from the Brand resource, but not anymore.
+            new Get(uriTemplate: '/addresses/{id}'),
+            // This operation will be used to create the IRI instead since the uriTemplate matches.
+            new Get(
+                uriTemplate: '/brands/{brandId}/addresses/{id}',
+                uriVariables: [
+                    'brandId' => new Link(toProperty: 'brand', fromClass: Brand::class),
+                    'id' => new Link(fromClass: Address::class),
+                ]
+            )
+        ],
+    )]
     class Address
     {
         public function __construct(
             #[ApiProperty(identifier: true)]
-            public readonly int $id,
+            public readonly int $id = 1,
             #[Groups('read')]
-            public readonly string $name,
-            private Brand $brand
+            public readonly string $name = 'Anon',
+            private ?Brand $brand = null
         )
         {
         }
@@ -175,12 +182,15 @@ namespace App\Playground {
 
 
 namespace App\Tests {
+    use ApiPlatform\Playground\Test\TestGuideTrait;
     use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
     use App\ApiResource\Brand;
 
-    final class brandTest extends ApiTestCase
+    final class BrandTest extends ApiTestCase
     {
-        public function testAsAnonymousICanAccessTheDocumentation(): void
+        use TestGuideTrait;
+
+        public function testResourceExposeIRI(): void
         {
             static::createClient()->request('GET', '/brands/1.jsonld');
 
