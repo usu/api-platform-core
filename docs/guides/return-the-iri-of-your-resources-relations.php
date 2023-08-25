@@ -76,7 +76,7 @@ namespace App\ApiResource {
             return $this;
         }
 
-        public function provide(Operation $operation, array $uriVariables = [], array $context = [])
+        public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
         {
             return (new self(1, 'Ford'))
                     ->setHeadQuarters(new Address(1, 'One American Road near Michigan Avenue, Dearborn, Michigan'))
